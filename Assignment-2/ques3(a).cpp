@@ -7,12 +7,12 @@ int findMissingLinear(int arr[], int n) {
             return i + 1;
         }
     }
-    return n; // if last element is missing
+    return n; 
 }
 
 int main() {
-    int arr[] = {1, 2, 3, 5, 6}; // missing 4
-    int n = 6; // numbers from 1 to 6
+    int arr[] = {1, 2, 3, 5, 6}; 
+    int n = 6; 
 
     cout << "Missing number (Linear): " << findMissingLinear(arr, n) << endl;
     return 0;
