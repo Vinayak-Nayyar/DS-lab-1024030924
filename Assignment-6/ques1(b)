@@ -1,0 +1,155 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+};
+
+Node* head = NULL;
+
+
+void insertAtBeginning(int value) {
+    Node* newNode = new Node{value, NULL, NULL};
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+    newNode->next = head;
+    head->prev = newNode;
+    head = newNode;
+}
+
+
+void insertAtEnd(int value) {
+    Node* newNode = new Node{value, NULL, NULL};
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+    Node* temp = head;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+    newNode->prev = temp;
+}
+
+
+void insertAfter(int key, int value) {
+    Node* temp = head;
+    while (temp != NULL) {
+        if (temp->data == key) {
+            Node* newNode = new Node{value, temp->next, temp};
+            if (temp->next != NULL)
+                temp->next->prev = newNode;
+            temp->next = newNode;
+            return;
+        }
+        temp = temp->next;
+    }
+    cout << "Node not found!\n";
+}
+
+
+void deleteNode(int key) {
+    if (head == NULL) {
+        cout << "List empty!\n";
+        return;
+    }
+
+    Node* temp = head;
+
+ 
+    if (temp->data == key) {
+        head = temp->next;
+        if (head != NULL)
+            head->prev = NULL;
+        delete temp;
+        return;
+    }
+
+
+    while (temp != NULL && temp->data != key)
+        temp = temp->next;
+
+    if (temp == NULL) {
+        cout << "Node not found!\n";
+        return;
+    }
+
+    if (temp->next != NULL)
+        temp->next->prev = temp->prev;
+    if (temp->prev != NULL)
+        temp->prev->next = temp->next;
+
+    delete temp;
+}
+
+
+bool searchNode(int key) {
+    Node* temp = head;
+    while (temp != NULL) {
+        if (temp->data == key) return true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+void display() {
+    Node* temp = head;
+    cout << "Doubly List: ";
+    while (temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    int choice, value, key;
+
+    while (true) {
+        cout << "\n--- DOUBLY LINKED LIST MENU ---\n";
+        cout << "1. Insert at Beginning\n";
+        cout << "2. Insert at End\n";
+        cout << "3. Insert After\n";
+        cout << "4. Delete Node\n";
+        cout << "5. Search Node\n";
+        cout << "6. Display\n";
+        cout << "7. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cin >> value;
+            insertAtBeginning(value);
+            break;
+        case 2:
+            cin >> value;
+            insertAtEnd(value);
+            break;
+        case 3:
+            cin >> key >> value;
+            insertAfter(key, value);
+            break;
+        case 4:
+            cin >> key;
+            deleteNode(key);
+            break;
+        case 5:
+            cin >> key;
+            cout << (searchNode(key) ? "Found!\n" : "Not Found!\n");
+            break;
+        case 6:
+            display();
+            break;
+        case 7:
+            return 0;
+        default:
+            cout << "Invalid choice!\n";
+        }
+    }
+}
