@@ -1,0 +1,54 @@
+#include <iostream>
+using namespace std;
+
+struct DNode {
+    int data;
+    DNode* next;
+    DNode* prev;
+};
+
+struct CNode {
+    int data;
+    CNode* next;
+};
+
+DNode* dhead = NULL;
+CNode* chead = NULL;
+
+int sizeDoubly() {
+    int count = 0;
+    DNode* temp = dhead;
+    while (temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+int sizeCircular() {
+    if (chead == NULL) return 0;
+    int count = 0;
+    CNode* temp = chead;
+    do {
+        count++;
+        temp = temp->next;
+    } while (temp != chead);
+    return count;
+}
+
+int main() {
+    dhead = new DNode{10, NULL, NULL};
+    dhead->next = new DNode{20, NULL, dhead};
+    dhead->next->next = new DNode{30, NULL, dhead->next};
+
+    CNode* a = new CNode{5, NULL};
+    CNode* b = new CNode{15, NULL};
+    CNode* c = new CNode{25, NULL};
+    chead = a;
+    a->next = b;
+    b->next = c;
+    c->next = a;
+
+    cout << "Size of Doubly Linked List: " << sizeDoubly() << endl;
+    cout << "Size of Circular Linked List: " << sizeCircular() << endl;
+}
