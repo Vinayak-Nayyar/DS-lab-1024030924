@@ -1,0 +1,47 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    char data;
+    Node* next;
+    Node* prev;
+};
+
+Node* head = NULL;
+
+bool isPalindrome() {
+    if (!head) return true;
+
+    Node* left = head;
+    Node* right = head;
+
+    while (right->next != NULL)
+        right = right->next;
+
+    while (left != right && right->next != left) {
+        if (left->data != right->data)
+            return false;
+        left = left->next;
+        right = right->prev;
+    }
+    return true;
+}
+
+int main() {
+    Node* a = new Node{'r', NULL, NULL};
+    Node* b = new Node{'a', NULL, a};
+    Node* c = new Node{'d', NULL, b};
+    Node* d = new Node{'a', NULL, c};
+    Node* e = new Node{'r', NULL, d};
+
+    head = a;
+    a->next = b;
+    b->next = c;
+    c->next = d;
+    d->next = e;
+
+    if (isPalindrome())
+        cout << "Palindrome";
+    else
+        cout << "Not Palindrome";
+}
