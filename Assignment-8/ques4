@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+Node* createNode(int x) {
+    Node* t = new Node;
+    t->data = x;
+    t->left = t->right = NULL;
+    return t;
+}
+
+bool isBSTUtil(Node* root, Node*& prev) {
+    if (root == NULL) return true;
+
+    if (!isBSTUtil(root->left, prev)) return false;
+
+    if (prev != NULL && root->data <= prev->data) return false;
+    prev = root;
+
+    return isBSTUtil(root->right, prev);
+}
+
+bool isBST(Node* root) {
+    Node* prev = NULL;
+    return isBSTUtil(root, prev);
+}
+
+int main() {
+    Node* root = createNode(10);
+    root->left = createNode(5);
+    root->right = createNode(20);
+    root->left->left = createNode(3);
+    root->left->right = createNode(8);
+
+    if (isBST(root))
+        cout << "Binary Tree is a BST";
+    else
+        cout << "Binary Tree is NOT a BST";
+
+    return 0;
+}
