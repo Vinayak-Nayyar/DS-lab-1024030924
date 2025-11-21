@@ -1,0 +1,88 @@
+#include <iostream>
+using namespace std;
+
+
+// Circular Linked List
+
+struct CNode {
+    int data;
+    CNode* next;
+};
+
+CNode* chead = NULL;
+
+// Search in Circular Linked List
+bool searchCircular(int key) {
+    if (chead == NULL) return false;
+
+    CNode* temp = chead;
+    do {
+        if (temp->data == key)
+            return true;
+        temp = temp->next;
+    } while (temp != chead);
+
+    return false;
+}
+
+
+
+// Doubly Linked List
+
+struct DNode {
+    int data;
+    DNode* next;
+    DNode* prev;
+};
+
+DNode* dhead = NULL;
+
+// Search in Doubly Linked List
+bool searchDoubly(int key) {
+    DNode* temp = dhead;
+    while (temp != NULL) {
+        if (temp->data == key)
+            return true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+
+
+// Main (Only Search Demonstration)
+
+int main() {
+    
+    chead = new CNode{10, NULL};
+    CNode* c2 = new CNode{20, NULL};
+    CNode* c3 = new CNode{30, NULL};
+    chead->next = c2;
+    c2->next = c3;
+    c3->next = chead;
+
+    
+    dhead = new DNode{40, NULL, NULL};
+    DNode* d2 = new DNode{50, NULL, dhead};
+    DNode* d3 = new DNode{60, NULL, d2};
+    dhead->next = d2;
+    d2->next = d3;
+
+    int key;
+    cout << "Enter value to search: ";
+    cin >> key;
+
+  
+    if (searchCircular(key))
+        cout << key << " found in Circular Linked List\n";
+    else
+        cout << key << " NOT found in Circular Linked List\n";
+
+
+    if (searchDoubly(key))
+        cout << key << " found in Doubly Linked List\n";
+    else
+        cout << key << " NOT found in Doubly Linked List\n";
+
+    return 0;
+}
