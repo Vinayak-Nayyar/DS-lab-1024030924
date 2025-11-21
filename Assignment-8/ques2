@@ -1,0 +1,110 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+Node* createNode(int x) {
+    Node* t = new Node;
+    t->data = x;
+    t->left = t->right = NULL;
+    return t;
+}
+
+Node* insertNode(Node* root, int x) {
+    if (!root) return createNode(x);
+    if (x < root->data) root->left = insertNode(root->left, x);
+    else root->right = insertNode(root->right, x);
+    return root;
+}
+
+Node* searchRecursive(Node* root, int key) {
+    if (!root || root->data == key) return root;
+    if (key < root->data) return searchRecursive(root->left, key);
+    return searchRecursive(root->right, key);
+}
+
+Node* searchNonRecursive(Node* root, int key) {
+    while (root) {
+        if (root->data == key) return root;
+        root = (key < root->data) ? root->left : root->right;
+    }
+    return NULL;
+}
+
+Node* findMin(Node* root) {
+    while (root && root->left)
+        root = root->left;
+    return root;
+}
+
+Node* findMax(Node* root) {
+    while (root && root->right)
+        root = root->right;
+    return root;
+}
+
+Node* inorderSuccessor(Node* root, Node* x) {
+    if (x->right) return findMin(x->right);
+
+    Node* succ = NULL;
+    while (root) {
+        if (x->data < root->data) {
+            succ = root;
+            root = root->left;
+        } else if (x->data > root->data)
+            root = root->right;
+        else
+            break;
+    }
+    return succ;
+}
+
+Node* inorderPredecessor(Node* root, Node* x) {
+    if (x->left) return findMax(x->left);
+
+    Node* pred = NULL;
+    while (root) {
+        if (x->data > root->data) {
+            pred = root;
+            root = root->right;
+        } else if (x->data < root->data)
+            root = root->left;
+        else
+            break;
+    }
+    return pred;
+}
+
+int main() {
+    Node* root = NULL;
+    int values[] = {50, 30, 70, 20, 40, 60, 80};
+    for (int v : values) root = insertNode(root, v);
+
+    int key = 40;
+    Node* r1 = searchRecursive(root, key);
+    Node* r2 = searchNonRecursive(root, key);
+
+    cout << "Recursive Search: ";
+    if (r1) cout << "Found\n"; else cout << "Not Found\n";
+
+    cout << "Non-Recursive Search: ";
+    if (r2) cout << "Found\n"; else cout << "Not Found\n";
+
+    cout << "Minimum Element: " << findMin(root)->data << endl;
+    cout << "Maximum Element: " << findMax(root)->data << endl;
+
+    Node* x = searchRecursive(root, 50);
+
+    Node* succ = inorderSuccessor(root, x);
+    Node* pred = inorderPredecessor(root, x);
+
+    cout << "In-order Successor of 50: ";
+    if (succ) cout << succ->data << endl; else cout << "None\n";
+
+    cout << "In-order Predecessor of 50: ";
+    if (pred) cout << pred->data << endl; else cout << "None\n";
+}
